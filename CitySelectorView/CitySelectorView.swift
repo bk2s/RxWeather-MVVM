@@ -13,6 +13,7 @@ class CitySelectorView: UIViewController {
     
     let bag = DisposeBag()
     var selectedCity: ((String) -> Void)?
+    let ac = FetchCityName()
 
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var searchButton: UIButton!
@@ -27,6 +28,11 @@ class CitySelectorView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
   
+        ac.fetchCity(predict: "Кие") { cities in
+            cities.compactMap { city in
+                print(">>>>", city.address?.name)
+            }
+        }
         
             // Заготовка для отслеживания введенных городов
         
