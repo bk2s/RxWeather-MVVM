@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" restorationIdentifier="weatherDetailCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="weatherDetailCell" rowHeight="35" id="KGk-i7-Jjw" customClass="WeatherDetailsTableViewCell" customModule="RxWeather_MVVM" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="335" height="35"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM" customClass="WeatherDetailsTableViewCell" customModule="RxWeather_MVVM" customModuleProvider="target">
+                <rect key="frame" x="0.0" y="0.0" width="335" height="35"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Kya-Fs-oeg">
+                        <rect key="frame" x="0.0" y="6" width="335" height="23"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_wind" translatesAutoresizingMaskIntoConstraints="NO" id="jBT-bl-csp">
+                                <rect key="frame" x="0.0" y="0.0" width="23" height="23"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="23" id="1O3-4c-Knb"/>
+                                    <constraint firstAttribute="width" constant="23" id="YO0-sh-iBn"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5м/сек" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iQG-iO-41A">
+                                <rect key="frame" x="33" y="0.0" width="269" height="23"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow.up.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="unQ-qj-1Of">
+                                <rect key="frame" x="312" y="2.5" width="23" height="17.5"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="23" id="1eE-3D-sFy"/>
+                                    <constraint firstAttribute="height" constant="23" id="yR0-l1-Pkk"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="Kya-Fs-oeg" secondAttribute="trailing" id="HIL-AM-5e9"/>
+                    <constraint firstItem="Kya-Fs-oeg" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="JtJ-0N-yFc"/>
+                    <constraint firstItem="Kya-Fs-oeg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="iZ7-4I-jzf"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="descriptionLabel" destination="iQG-iO-41A" id="bsj-uJ-rt3"/>
+                <outlet property="leftImage" destination="jBT-bl-csp" id="Fsj-iI-kwI"/>
+                <outlet property="rightImage" destination="unQ-qj-1Of" id="MHD-ZL-osO"/>
+            </connections>
+            <point key="canvasLocation" x="148.55072463768118" y="121.54017857142857"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="arrow.up.right" catalog="system" width="128" height="112"/>
+        <image name="ic_wind" width="17" height="19"/>
+    </resources>
+</document>
