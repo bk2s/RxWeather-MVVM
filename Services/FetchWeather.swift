@@ -8,43 +8,48 @@
 import Foundation
 
 struct FetchWeather {
-
+    
     func fetchData(searchRequest: SearchRequestModel, completion: @escaping (_ weather: WeatherProtocol) -> ()) {
         print(searchRequest)
         guard let url = URL.urlForWeatherApi(searchBy: searchRequest) else { print("lol"); return }
-            let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { data, responce, error in
-                if error == nil {
-                    let decoder = JSONDecoder()
-                    if let safeData = data {
-                        do {
-                            switch searchRequest.searchType {
-                                
-                            case .cityName, .coordinates:
-                                let results = try decoder.decode(WeatherModel.self, from: safeData)
-                                        DispatchQueue.main.async {
-                                            completion(results)
-                                        }
-                            case .dailyHourly:
-                                let results = try decoder.decode(DailyHourlyWeatherModel.self, from: safeData)
-                                        DispatchQueue.main.async {
-                                            completion(results)
-                                        }
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: url) { data, responce, error in
+            if error == nil {
+                let decoder = JSONDecoder()
+                if let safeData = data {
+                    do {
+                        switch searchRequest.searchType {
+                        case .cityName, .coordinates:
+                            let results = try decoder.decode(WeatherModel.self, from: safeData)
+                            DispatchQueue.main.async {
+                                completion(results)
                             }
-                    
-                        } catch {
-                            print(error)
+                        case .dailyHourly:
+                            let results = try decoder.decode(DailyHourlyWeatherModel.self, from: safeData)
+                            DispatchQueue.main.async {
+                                completion(results)
+                            }
                         }
+                        
+                    } catch {
+                        print(error)
                     }
                 }
             }
-            task.resume()
+        }
+        task.resume()
     }
     
     
 }
 
 extension URL {
+    static func urlForAutocomplete(pred: String) -> URL? {
+        let encodedCity = pred.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
+        let autocompleteUrl = "https://api.locationiq.com/v1/autocomplete.php?key=pk.dfa5f7c230ad3657a2288c9e18674fad&limit=10&accept-language=ua&q="
+        return URL(string: autocompleteUrl + encodedCity)
+    }
+    
     static func urlForWeatherApi(searchBy: SearchRequestModel) -> URL? {
         switch searchBy.searchType {
         case .cityName:

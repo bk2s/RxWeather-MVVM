@@ -25,17 +25,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.bind(with: viewModel)
-        self.cityName.subscribe(onNext: { city in
-            self.currentCityName.text = city
-        }).disposed(by: bag)
-        self.cityName.onNext("Одесса")
         self.prepareTableViews()
-        
-        self.geoButton.rx.tap.subscribe(onNext: {
-            self.present(CitySelectorView(selectedCity: { city in
-                self.cityName.onNext(city)
-            }), animated: true)
-        }).disposed(by: bag)
     }
     
     // MARK: - Prepare
@@ -58,6 +48,18 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     private func bind(with viewModel: MainViewModel) {
         let input = MainViewModel.Input(geoTapped: self.geoButton.rx.tap.asDriver(), cityName: self.cityName)
         let output = viewModel.transform(input: input)
+        
+        self.cityName.subscribe(onNext: { city in
+            self.currentCityName.text = city
+        }).disposed(by: bag)
+        self.cityName.onNext("Одесса")
+        
+        // Buttons
+        self.geoButton.rx.tap.subscribe(onNext: {
+            self.present(CitySelectorView(selectedCity: { city in
+                self.cityName.onNext(city)
+            }), animated: true)
+        }).disposed(by: bag)
         
         // Detail Weather
         output.weatherModel.bind(to: weatherDetailTableView.rx.items(cellIdentifier: "weatherDetailCell", cellType: WeatherDetailsTableViewCell.self)) { row, item, cell in

@@ -13,6 +13,8 @@ class CitySelectorView: UIViewController {
     
     let bag = DisposeBag()
     var selectedCity: ((String) -> Void)?
+    var viewModel = CitySelectorModel()
+    var predict = PublishSubject<String>()
 
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var searchButton: UIButton!
@@ -26,29 +28,24 @@ class CitySelectorView: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-  
-        
-            // Заготовка для отслеживания введенных городов
-        
-//        self.searchField.rx.controlEvent(.editingDidEndOnExit)
-//            .map { self.searchField.text }
-//            .subscribe(onNext: { city in
-//                if let city = city {
-//                self.selectedCity?(city)
-//                }
-//            }).disposed(by: bag)
-        
-        /*- Cупер полезная хрень
-        self.cityNameTextField.rx.value.delay(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { value in
-                if value != "" {
-                    FetchWeather.fetchWeather(by: value!)
-                }
-                
-            }).disposed(by: bag)
-        -*/
-        
+        self.bind(with: viewModel)
+    }
 
+    // MARK: - RxBinds
+    
+    func bind(with model: CitySelectorModel) {
+        let input = CitySelectorModel.Input(predict: self.predict)
+        let output =  model.transform(input: input)
+        
+        // Observe SearchField RX
+        self.searchField.rx.value.delay(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { city in
+                if let city = city {
+                    self.predict.onNext(city)
+                }
+            }).disposed(by: bag)
+        
+        // Buttons
         self.backButton.rx.tap.subscribe(onNext: { _ in
             self.dismiss(animated: true)
         }).disposed(by: bag)
@@ -59,9 +56,23 @@ class CitySelectorView: UIViewController {
             }
             self.dismiss(animated: true)
         }).disposed(by: bag)
-        // Do any additional setup after loading the view.
+        
+        // TableView RX
+        output.cityNames.bind(to: citiesTableView.rx.items) {
+            (tableView: UITableView, index: Int, element: String) in
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            cell.textLabel?.text = element
+            return cell
+          }.disposed(by: bag)
+        
+        // TableView tapped RX
+        citiesTableView.rx.itemSelected
+          .subscribe(onNext: { [weak self] indexPath in
+              let cell = self?.citiesTableView.cellForRow(at: indexPath) // as? NameOfCell
+              if let city = cell?.textLabel?.text {
+              self?.selectedCity?(city)
+                  self?.dismiss(animated: true)
+              }
+          }).disposed(by: bag)
     }
-
-    // MARK: - Navigation
-
 }
