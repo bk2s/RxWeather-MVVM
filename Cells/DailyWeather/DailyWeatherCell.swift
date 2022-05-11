@@ -47,11 +47,4 @@ class DailyWeatherCell: UITableViewCell {
            break
         }
     }
-    
-}
-
-extension Double {
-    func asString() -> String {
-        return String(Int(self))
-    }
 }

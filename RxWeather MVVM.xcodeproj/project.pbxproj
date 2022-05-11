@@ -32,6 +32,9 @@
 		0299A817282C548200A50A6F /* AutocompleteCity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0299A816282C548200A50A6F /* AutocompleteCity.swift */; };
 		0299A819282C54D100A50A6F /* FetchCityName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0299A818282C54D100A50A6F /* FetchCityName.swift */; };
 		0299A81B282C5A6D00A50A6F /* CitySelectorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0299A81A282C5A6D00A50A6F /* CitySelectorModel.swift */; };
+		0299A81E282C702100A50A6F /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0299A81D282C702100A50A6F /* URL.swift */; };
+		0299A820282C705000A50A6F /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0299A81F282C705000A50A6F /* Sequence.swift */; };
+		0299A822282C706700A50A6F /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0299A821282C706700A50A6F /* Double.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +63,9 @@
 		0299A816282C548200A50A6F /* AutocompleteCity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteCity.swift; sourceTree = "<group>"; };
 		0299A818282C54D100A50A6F /* FetchCityName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCityName.swift; sourceTree = "<group>"; };
 		0299A81A282C5A6D00A50A6F /* CitySelectorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySelectorModel.swift; sourceTree = "<group>"; };
+		0299A81D282C702100A50A6F /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		0299A81F282C705000A50A6F /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
+		0299A821282C706700A50A6F /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +104,7 @@
 		0254A8F328071C44009074DB = {
 			isa = PBXGroup;
 			children = (
+				0299A81C282C700B00A50A6F /* Extensions */,
 				02119A612818902D001C31FE /* Models */,
 				027A011B282B247200E2033F /* Services */,
 				027A011E282B277500E2033F /* MainView */,
@@ -186,6 +193,16 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		0299A81C282C700B00A50A6F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0299A81D282C702100A50A6F /* URL.swift */,
+				0299A81F282C705000A50A6F /* Sequence.swift */,
+				0299A821282C706700A50A6F /* Double.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -270,11 +287,14 @@
 			files = (
 				02119A652818919D001C31FE /* FetchWeather.swift in Sources */,
 				027A0122282B29EA00E2033F /* ConditionName.swift in Sources */,
+				0299A820282C705000A50A6F /* Sequence.swift in Sources */,
 				02119A6328189034001C31FE /* Weather.swift in Sources */,
 				0254A90428071C44009074DB /* ViewController.swift in Sources */,
 				0299A817282C548200A50A6F /* AutocompleteCity.swift in Sources */,
 				0222B5D828201B36001A3553 /* CitySelectorView.swift in Sources */,
 				0254A90028071C44009074DB /* AppDelegate.swift in Sources */,
+				0299A81E282C702100A50A6F /* URL.swift in Sources */,
+				0299A822282C706700A50A6F /* Double.swift in Sources */,
 				02119A67281891D6001C31FE /* MainViewModel.swift in Sources */,
 				0299A819282C54D100A50A6F /* FetchCityName.swift in Sources */,
 				0254A91B28073BE5009074DB /* HourlyWeatherCollectionViewCell.swift in Sources */,
