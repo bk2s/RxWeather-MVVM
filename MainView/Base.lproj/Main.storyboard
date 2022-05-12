@@ -68,13 +68,17 @@
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_my_location" translatesAutoresizingMaskIntoConstraints="NO" id="8ct-jd-mcO">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wah-CT-v18">
                                                         <rect key="frame" x="360" y="1" width="22" height="22"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="22" id="Ahe-Qq-TvM"/>
-                                                            <constraint firstAttribute="height" constant="22" id="jqL-RE-NIR"/>
+                                                            <constraint firstAttribute="height" constant="22" id="chP-ud-cup"/>
+                                                            <constraint firstAttribute="width" constant="22" id="en6-kJ-hec"/>
                                                         </constraints>
-                                                    </imageView>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="">
+                                                            <backgroundConfiguration key="background" image="ic_my_location"/>
+                                                        </buttonConfiguration>
+                                                    </button>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="24" id="147-vL-YyW"/>
@@ -152,6 +156,7 @@
                         <outlet property="geoButton" destination="SNh-uH-Tj5" id="Eh0-g1-zcz"/>
                         <outlet property="hourlyWeatherCollectionView" destination="VTH-1J-QdD" id="jSn-KU-Ee5"/>
                         <outlet property="largeWeatherIcon" destination="FWm-jY-Wni" id="s50-Pe-BM1"/>
+                        <outlet property="mapButton" destination="wah-CT-v18" id="qwq-gK-jPI"/>
                         <outlet property="weatherDetailTableView" destination="MBy-nn-Hp4" id="SqV-Xi-mL8"/>
                     </connections>
                 </viewController>

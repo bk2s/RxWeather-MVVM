@@ -71,7 +71,7 @@ class CitySelectorView: UIViewController {
               let cell = self?.citiesTableView.cellForRow(at: indexPath) // as? NameOfCell
               if let city = cell?.textLabel?.text {
               self?.selectedCity?(city)
-                  self?.dismiss(animated: true)
+                  //self?.dismiss(animated: true)
               }
           }).disposed(by: bag)
     }

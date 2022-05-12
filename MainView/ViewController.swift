@@ -9,12 +9,20 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+struct LatLon {
+    var lat: Double
+    var lon: Double
+}
+
 class ViewController: UIViewController, UIScrollViewDelegate {
     
     var viewModel = MainViewModel()
     var bag = DisposeBag()
     public var cityName = PublishSubject<String>()
+    public var coordinates = PublishSubject<LatLon>()
+    var latLon = LatLon(lat: 0, lon: 0)
 
+    @IBOutlet weak var mapButton: UIButton!
     @IBOutlet weak var geoButton: UIButton!
     @IBOutlet weak var currentCityName: UILabel!
     @IBOutlet weak var largeWeatherIcon: UIImageView!
@@ -46,7 +54,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 
     // MARK: - RxBinds
     private func bind(with viewModel: MainViewModel) {
-        let input = MainViewModel.Input(geoTapped: self.geoButton.rx.tap.asDriver(), cityName: self.cityName)
+        
+        let input = MainViewModel.Input(geoTapped: self.geoButton.rx.tap.asDriver(), cityName: self.cityName, coordinates: self.coordinates)
         let output = viewModel.transform(input: input)
         
         self.cityName.subscribe(onNext: { city in
@@ -59,6 +68,16 @@ class ViewController: UIViewController, UIScrollViewDelegate {
             self.present(CitySelectorView(selectedCity: { city in
                 self.cityName.onNext(city)
             }), animated: true)
+        }).disposed(by: bag)
+        
+        self.mapButton.rx.tap.subscribe(onNext: {
+            self.present(WeatherMapView(currentCity: self.cityName,
+                                        latLon: self.latLon,
+                                        selectedCoordinates: { lat, lon in
+                let latLonYo = LatLon(lat: lat, lon: lon)
+                print("HOLY SHIT", lat, lon, self.cityName)
+                self.coordinates.onNext(latLonYo)
+            }),animated: true)
         }).disposed(by: bag)
         
         // Detail Weather
@@ -78,6 +97,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         // Weather Icon RX
         output.weatherIcon.subscribe(onNext: { icon in self.largeWeatherIcon.image = UIImage(systemName: icon); print(">>>>", icon) }).disposed(by: bag)
+        
+        output.latLon.subscribe(onNext: { latLon in
+            self.latLon = latLon
+        }).disposed(by: bag)
+        
+        output.cityName.subscribe(onNext: { cityName in
+            self.currentCityName.text = cityName
+        }).disposed(by: bag)
 
 //        output.weatherModel.subscribe(onNext: { weather in
 //        }).disposed(by: bag)
