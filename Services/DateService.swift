@@ -20,12 +20,12 @@ class DateService {
         let date = Date(timeIntervalSince1970: time)
         let currentDate = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ru_RU")
+        dateFormatter.locale = Locale(identifier: "en_EN")
         switch dateCase {
         case .hour:
             dateFormatter.dateFormat = "HH" + "⁰⁰"
             if dateFormatter.string(from: currentDate) == dateFormatter.string(from: date) {
-                return "Зараз"
+                return "Now"
             } else {
             return dateFormatter.string(from: date)
             }

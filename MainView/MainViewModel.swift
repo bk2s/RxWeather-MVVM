@@ -23,33 +23,56 @@ class MainViewModel: ViewModel {
     private let fetchWeather = FetchWeather()
     
     // MARK: - Transform
+
+    
     func transform(input: Input) -> Output {
         let detailModels = PublishSubject<[WeatherDetailModel]>()
         let hourlyWeatherModel = PublishSubject<[HourlyWeatherModel]>()
         let dailyWeatherModel = PublishSubject<[DailyWeatherModel]>()
         let weatherIcon = PublishSubject<String>()
+        let cityName = PublishSubject<String>()
+        let latLon = PublishSubject<LatLon>()
+        
+        func fetch(_ weather: WeatherProtocol) {
+            let currentWeather = weather as! WeatherModel
+            detailModels.onNext(self.generateModel(from: currentWeather))
+            
+            print(">>>>> currentName", currentWeather.name)
+            weatherIcon.onNext(ConditionName.shared.conditionName(conditionId: currentWeather.weather?[0].id ?? 0))
+            cityName.onNext(currentWeather.name ?? "Noname")
+            latLon.onNext(LatLon(lat: currentWeather.coord?.lat ?? 0, lon: currentWeather.coord?.lon ?? 0))
+            
+            let dailyHourlyRequest = SearchRequestModel(searchType: .dailyHourly, latitude: currentWeather.coord?.lat ?? 0, longtitude: currentWeather.coord?.lon ?? 0)
+            self.fetchWeather.fetchData(searchRequest: dailyHourlyRequest) { dh in
+                let dailyHourly = dh as! DailyHourlyWeatherModel
+                hourlyWeatherModel.onNext(self.generateHourly(from: dailyHourly))
+                dailyWeatherModel.onNext(self.generateDaily(from: dailyHourly))
+            }
+        }
+        
+        
+        input.coordinates.bind { coord in
+            let coordRequest = SearchRequestModel(searchType: .coordinates,
+                                                  latitude: coord.lat,
+                                                  longtitude: coord.lon)
+            self.fetchWeather.fetchData(searchRequest: coordRequest) { weather in
+                fetch(weather)
+            }
+        }.disposed(by: bag)
 
         input.cityName.bind(onNext: { city in
             print(city)
             let cityRequest = SearchRequestModel(searchType: .cityName, cityName: city)
             self.fetchWeather.fetchData(searchRequest: cityRequest, completion: { weather in
-                let currentWeather = weather as! WeatherModel
-                detailModels.onNext(self.generateModel(from: currentWeather))
-                
-                weatherIcon.onNext(ConditionName.shared.conditionName(conditionId: currentWeather.weather?[0].id ?? 0))
-
-                let dailyHourlyRequest = SearchRequestModel(searchType: .dailyHourly, latitude: currentWeather.coord?.lat ?? 0, longtitude: currentWeather.coord?.lon ?? 0)
-                self.fetchWeather.fetchData(searchRequest: dailyHourlyRequest) { dh in
-                    let dailyHourly = dh as! DailyHourlyWeatherModel
-                    hourlyWeatherModel.onNext(self.generateHourly(from: dailyHourly))
-                    dailyWeatherModel.onNext(self.generateDaily(from: dailyHourly))
-                }
+                fetch(weather)
             })
         }).disposed(by: bag)
         return Output(weatherModel: detailModels,
                       hourlyWeatherModel: hourlyWeatherModel,
                       dailyWeatherModel: dailyWeatherModel,
-                      weatherIcon: weatherIcon
+                      weatherIcon: weatherIcon,
+                      cityName: cityName,
+                      latLon: latLon
         )
     }
     
@@ -101,6 +124,7 @@ class MainViewModel: ViewModel {
     struct Input {
         let geoTapped: Driver<Void>
         let cityName: PublishSubject<String>
+        let coordinates: PublishSubject<LatLon>
     }
     
     struct Output {
@@ -108,5 +132,7 @@ class MainViewModel: ViewModel {
         let hourlyWeatherModel: PublishSubject<[HourlyWeatherModel]>
         let dailyWeatherModel: PublishSubject<[DailyWeatherModel]>
         let weatherIcon: PublishSubject<String>
+        let cityName: PublishSubject<String>
+        let latLon: PublishSubject<LatLon>
     }
 }

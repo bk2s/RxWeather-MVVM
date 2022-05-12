@@ -38,7 +38,7 @@ class CitySelectorView: UIViewController {
         let output =  model.transform(input: input)
         
         // Observe SearchField RX
-        self.searchField.rx.value.delay(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
+        self.searchField.rx.value.delay(RxTimeInterval.milliseconds(30), scheduler: MainScheduler.instance)
             .subscribe(onNext: { city in
                 if let city = city {
                     self.predict.onNext(city)
