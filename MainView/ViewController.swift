@@ -71,13 +71,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }).disposed(by: bag)
         
         self.mapButton.rx.tap.subscribe(onNext: {
-            self.present(WeatherMapView(currentCity: self.cityName,
-                                        latLon: self.latLon,
+            self.present(WeatherMapView(latLon: self.latLon,
                                         selectedCoordinates: { lat, lon in
                 let latLonYo = LatLon(lat: lat, lon: lon)
                 print("HOLY SHIT", lat, lon, self.cityName)
                 self.coordinates.onNext(latLonYo)
-            }),animated: true)
+            }) ,animated: true)
         }).disposed(by: bag)
         
         // Detail Weather
