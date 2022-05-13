@@ -25,6 +25,8 @@
 		0254A9162807345D009074DB /* WeatherDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0254A9142807345D009074DB /* WeatherDetailsTableViewCell.xib */; };
 		0254A91B28073BE5009074DB /* HourlyWeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0254A91928073BE5009074DB /* HourlyWeatherCollectionViewCell.swift */; };
 		0254A91C28073BE5009074DB /* HourlyWeatherCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0254A91A28073BE5009074DB /* HourlyWeatherCollectionViewCell.xib */; };
+		02760FFE282E21A900BC6062 /* LoadingWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02760FFC282E21A900BC6062 /* LoadingWheelView.swift */; };
+		02760FFF282E21A900BC6062 /* LoadingWheelView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02760FFD282E21A900BC6062 /* LoadingWheelView.xib */; };
 		027A0119282B228000E2033F /* DailyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027A0117282B228000E2033F /* DailyWeatherCell.swift */; };
 		027A011A282B228000E2033F /* DailyWeatherCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 027A0118282B228000E2033F /* DailyWeatherCell.xib */; };
 		027A011D282B248500E2033F /* DateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027A011C282B248400E2033F /* DateService.swift */; };
@@ -58,6 +60,8 @@
 		0254A9142807345D009074DB /* WeatherDetailsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeatherDetailsTableViewCell.xib; sourceTree = "<group>"; };
 		0254A91928073BE5009074DB /* HourlyWeatherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherCollectionViewCell.swift; sourceTree = "<group>"; };
 		0254A91A28073BE5009074DB /* HourlyWeatherCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HourlyWeatherCollectionViewCell.xib; sourceTree = "<group>"; };
+		02760FFC282E21A900BC6062 /* LoadingWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingWheelView.swift; sourceTree = "<group>"; };
+		02760FFD282E21A900BC6062 /* LoadingWheelView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingWheelView.xib; sourceTree = "<group>"; };
 		027A0117282B228000E2033F /* DailyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherCell.swift; sourceTree = "<group>"; };
 		027A0118282B228000E2033F /* DailyWeatherCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DailyWeatherCell.xib; sourceTree = "<group>"; };
 		027A011C282B248400E2033F /* DateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateService.swift; sourceTree = "<group>"; };
@@ -108,6 +112,7 @@
 		0254A8F328071C44009074DB = {
 			isa = PBXGroup;
 			children = (
+				02760FFB282E218F00BC6062 /* LoadingWheel */,
 				0299A823282C71DF00A50A6F /* WeatherMap */,
 				0299A81C282C700B00A50A6F /* Extensions */,
 				02119A612818902D001C31FE /* Models */,
@@ -156,6 +161,15 @@
 				0254A91A28073BE5009074DB /* HourlyWeatherCollectionViewCell.xib */,
 			);
 			path = HourlyWeather;
+			sourceTree = "<group>";
+		};
+		02760FFB282E218F00BC6062 /* LoadingWheel */ = {
+			isa = PBXGroup;
+			children = (
+				02760FFC282E21A900BC6062 /* LoadingWheelView.swift */,
+				02760FFD282E21A900BC6062 /* LoadingWheelView.xib */,
+			);
+			path = LoadingWheel;
 			sourceTree = "<group>";
 		};
 		027A0116282B225B00E2033F /* DailyWeather */ = {
@@ -286,6 +300,7 @@
 				0254A90C28071C48009074DB /* LaunchScreen.storyboard in Resources */,
 				0222B5D928201B36001A3553 /* CitySelectorView.xib in Resources */,
 				0254A9162807345D009074DB /* WeatherDetailsTableViewCell.xib in Resources */,
+				02760FFF282E21A900BC6062 /* LoadingWheelView.xib in Resources */,
 				0299A827282C71F300A50A6F /* WeatherMapView.xib in Resources */,
 				0254A90928071C48009074DB /* Assets.xcassets in Resources */,
 				027A011A282B228000E2033F /* DailyWeatherCell.xib in Resources */,
@@ -313,6 +328,7 @@
 				0299A822282C706700A50A6F /* Double.swift in Sources */,
 				02119A67281891D6001C31FE /* MainViewModel.swift in Sources */,
 				0299A819282C54D100A50A6F /* FetchCityName.swift in Sources */,
+				02760FFE282E21A900BC6062 /* LoadingWheelView.swift in Sources */,
 				0254A91B28073BE5009074DB /* HourlyWeatherCollectionViewCell.swift in Sources */,
 				0254A90228071C44009074DB /* SceneDelegate.swift in Sources */,
 				027A011D282B248500E2033F /* DateService.swift in Sources */,

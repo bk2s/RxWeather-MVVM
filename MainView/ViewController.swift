@@ -22,6 +22,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     public let coordinates = PublishSubject<Coordinates>()
     public let weatherDay = PublishSubject<[WeatherDetailModel]>()
     var latLon = Coordinates(lat: 0, lon: 0)
+    let wheel = LoadingWheelView()
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var mapButton: UIButton!
@@ -36,10 +37,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         self.bind(with: viewModel)
         self.prepareTableViews()
+        wheel.modalPresentationStyle = .overFullScreen
     }
     
     // MARK: - Prepare
     private func prepareTableViews() {
+        
         self.dateLabel.text = DateService.shared.dayFromUnixTime(time: 0, dateCase: .full)
         // Detail Weather
         weatherDetailTableView.rx.setDelegate(self).disposed(by: viewModel.bag)
@@ -109,6 +112,15 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         output.cityName.subscribe(onNext: { cityName in
             self.currentCityName.text = cityName
+        }).disposed(by: bag)
+        
+        output.loading.subscribe(onNext: { state in
+            switch state {
+            case .start:
+                self.present(self.wheel, animated: false, completion: nil)
+            case .stop:
+                self.wheel.dismiss(animated: false, completion: nil)
+            }
         }).disposed(by: bag)
         
         // TableView tapped RX
