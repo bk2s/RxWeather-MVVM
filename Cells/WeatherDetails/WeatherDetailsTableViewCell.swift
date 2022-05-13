@@ -61,7 +61,7 @@ class WeatherDetailsTableViewCell: UITableViewCell {
             self.descriptionLabel.text = model.description
             self.rightImage.isHidden = true
         case .humidity:
-            self.leftImage.image = UIImage(systemName: "humidity")
+            self.leftImage.image = UIImage(named: "ic_humidity")
             self.descriptionLabel.text = model.description
             self.rightImage.isHidden = true
         case .wind:
