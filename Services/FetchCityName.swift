@@ -10,8 +10,7 @@ import Foundation
 struct FetchCityName {
     
     func fetchCity(predict: String, completion: @escaping (_ cities: Autocomplete) -> ()) {
-        print(predict)
-        guard let url = URL.urlForAutocomplete(pred: predict) else { print("lol"); return }
+        guard let url = URL.urlForAutocomplete(pred: predict) else { return }
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: url) { data, responce, error in
             if error == nil {
@@ -22,7 +21,6 @@ struct FetchCityName {
                         DispatchQueue.main.async {
                             completion(results)
                         }
-                        
                     } catch {
                         print(error)
                     }

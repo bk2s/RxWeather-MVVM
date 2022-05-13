@@ -27,11 +27,8 @@ class HourlyWeatherCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-    
-   
-    
+        
     func bind(model: HourlyWeatherModel) {
         self.dayLabel.text = model.day
         self.weatherImage.image = UIImage(systemName: model.weatherImage)

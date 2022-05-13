@@ -12,39 +12,46 @@ struct DailyWeatherModel {
     let maxDayTemperature: Double
     let maxNightTemperature: Double
     let weatherIcon: String
-    let isSelected: Bool
+    let humidity: Int
+    let windSpeed: Double
+    let windDegree: Int
 }
 
 class DailyWeatherCell: UITableViewCell {
-
+    var model: DailyWeatherModel!
+    
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var dayNightMaxTemperatureLabel: UILabel!
     @IBOutlet weak var weatherIcon: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        self.acceptColors(selected)
     }
     
     public func bind(model: DailyWeatherModel) {
-        self.acceptColors(model.isSelected)
+        self.model = model
         self.dayLabel.text = DateService.shared.dayFromUnixTime(time: model.day, dateCase: .day)
         self.dayNightMaxTemperatureLabel.text = model.maxDayTemperature.asString() + "⁰ / " + model.maxNightTemperature.asString() + "⁰"
         self.weatherIcon.image = UIImage(systemName: model.weatherIcon)
     }
     
-    private func acceptColors(_ isSelected: Bool) {
+    func acceptColors(_ isSelected: Bool) {
         switch isSelected {
         case true:
-           break
+            self.dayNightMaxTemperatureLabel.textColor = UIColor(named: "IceBlueColor")
+            self.dayLabel.textColor = UIColor(named: "IceBlueColor")
+            self.weatherIcon.tintColor = UIColor(named: "IceBlueColor")
+            self.layer.shadowColor = CGColor(srgbRed: 255/90, green: 255/159, blue: 255/240, alpha: 1)
+            self.layer.shadowOffset = CGSize(width: 5, height: 5)
         case false:
-           break
+            self.dayNightMaxTemperatureLabel.textColor = .black
+            self.dayLabel.textColor = .black
+            self.weatherIcon.tintColor = .black
         }
     }
 }

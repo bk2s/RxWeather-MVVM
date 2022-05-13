@@ -23,7 +23,6 @@ class MainViewModel: ViewModel {
     private let fetchWeather = FetchWeather()
     
     // MARK: - Transform
-
     
     func transform(input: Input) -> Output {
         let detailModels = PublishSubject<[WeatherDetailModel]>()
@@ -31,16 +30,15 @@ class MainViewModel: ViewModel {
         let dailyWeatherModel = PublishSubject<[DailyWeatherModel]>()
         let weatherIcon = PublishSubject<String>()
         let cityName = PublishSubject<String>()
-        let latLon = PublishSubject<LatLon>()
+        let latLon = PublishSubject<Coordinates>()
         
         func fetch(_ weather: WeatherProtocol) {
             let currentWeather = weather as! WeatherModel
             detailModels.onNext(self.generateModel(from: currentWeather))
             
-            print(">>>>> currentName", currentWeather.name)
             weatherIcon.onNext(ConditionName.shared.conditionName(conditionId: currentWeather.weather?[0].id ?? 0))
             cityName.onNext(currentWeather.name ?? "Noname")
-            latLon.onNext(LatLon(lat: currentWeather.coord?.lat ?? 0, lon: currentWeather.coord?.lon ?? 0))
+            latLon.onNext(Coordinates(lat: currentWeather.coord?.lat ?? 0, lon: currentWeather.coord?.lon ?? 0))
             
             let dailyHourlyRequest = SearchRequestModel(searchType: .dailyHourly, latitude: currentWeather.coord?.lat ?? 0, longtitude: currentWeather.coord?.lon ?? 0)
             self.fetchWeather.fetchData(searchRequest: dailyHourlyRequest) { dh in
@@ -50,6 +48,9 @@ class MainViewModel: ViewModel {
             }
         }
         
+        input.weatherDay.bind { weather in
+            detailModels.onNext(weather)
+        }.disposed(by: bag)
         
         input.coordinates.bind { coord in
             let coordRequest = SearchRequestModel(searchType: .coordinates,
@@ -59,9 +60,8 @@ class MainViewModel: ViewModel {
                 fetch(weather)
             }
         }.disposed(by: bag)
-
+        
         input.cityName.bind(onNext: { city in
-            print(city)
             let cityRequest = SearchRequestModel(searchType: .cityName, cityName: city)
             self.fetchWeather.fetchData(searchRequest: cityRequest, completion: { weather in
                 fetch(weather)
@@ -78,7 +78,6 @@ class MainViewModel: ViewModel {
     
     // MARK: - Genarate Models
     func generateModel(from model: WeatherModel) -> [WeatherDetailModel] {
-        var detailModels: [WeatherDetailModel] = []
         let temperature = WeatherDetailModel(type: .temperature,
                                              description: String(Int(model.main?.temp ?? 0)) + "°",
                                              windDirection: nil)
@@ -88,10 +87,7 @@ class MainViewModel: ViewModel {
         let wind = WeatherDetailModel(type: .wind,
                                       description: String(model.wind?.speed ?? 0) + "м/сек",
                                       windDirection: model.wind?.deg)
-        detailModels.append(temperature)
-        detailModels.append(humidity)
-        detailModels.append(wind)
-        return detailModels
+        return [temperature, humidity, wind]
     }
     
     func generateHourly(from model: DailyHourlyWeatherModel) -> [HourlyWeatherModel] {
@@ -105,6 +101,19 @@ class MainViewModel: ViewModel {
         return hourlyWeather
     }
     
+    func generateModelFrom(model: DailyWeatherModel) -> [WeatherDetailModel] {
+        let temp = WeatherDetailModel(type: .temperature,
+                                      description: String(model.maxDayTemperature),
+                                      windDirection: nil)
+        let humidity = WeatherDetailModel(type: .humidity,
+                                          description: String(model.humidity),
+                                          windDirection: nil)
+        let wind = WeatherDetailModel(type: .wind,
+                                      description: String(model.windSpeed), windDirection: model.windDegree )
+        return [temp, humidity, wind]
+        
+    }
+    
     func generateDaily(from model: DailyHourlyWeatherModel) -> [DailyWeatherModel] {
         var dailyWeather: [DailyWeatherModel] = []
         _ = model.daily?.compactMap({ daily in
@@ -112,19 +121,22 @@ class MainViewModel: ViewModel {
                                             maxDayTemperature: daily.temp?.max ?? 0,
                                             maxNightTemperature:  daily.temp?.min ?? 0,
                                             weatherIcon: ConditionName.shared.conditionName(conditionId: daily.weather?[0].id ?? 0),
-                                            isSelected: false)
+                                            humidity: daily.humidity ?? 0,
+                                            windSpeed: daily.windSpeed ?? 0,
+                                            windDegree: daily.windDeg ?? 0)
             dailyWeather.append(weather)
         })
         return dailyWeather
     }
     
-
+    
     
     // MARK: - Input&Output
     struct Input {
         let geoTapped: Driver<Void>
         let cityName: PublishSubject<String>
-        let coordinates: PublishSubject<LatLon>
+        let coordinates: PublishSubject<Coordinates>
+        let weatherDay: PublishSubject<[WeatherDetailModel]>
     }
     
     struct Output {
@@ -133,6 +145,6 @@ class MainViewModel: ViewModel {
         let dailyWeatherModel: PublishSubject<[DailyWeatherModel]>
         let weatherIcon: PublishSubject<String>
         let cityName: PublishSubject<String>
-        let latLon: PublishSubject<LatLon>
+        let latLon: PublishSubject<Coordinates>
     }
 }

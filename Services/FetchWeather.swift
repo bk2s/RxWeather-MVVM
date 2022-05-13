@@ -10,9 +10,7 @@ import Foundation
 struct FetchWeather {
     
     func fetchData(searchRequest: SearchRequestModel, completion: @escaping (_ weather: WeatherProtocol) -> ()) {
-        print(searchRequest)
-        guard let url = URL.urlForWeatherApi(searchBy: searchRequest) else { print("lol"); return }
-        print(">>>> URL", url)
+        guard let url = URL.urlForWeatherApi(searchBy: searchRequest) else { return }
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: url) { data, responce, error in
             if error == nil {
@@ -20,17 +18,10 @@ struct FetchWeather {
                 if let safeData = data {
                     do {
                         switch searchRequest.searchType {
-                        case .cityName:
+                        case .cityName, .coordinates:
                             let results = try decoder.decode(WeatherModel.self, from: safeData)
                             DispatchQueue.main.async {
                                 completion(results)
-                                print(">>>> CITYNAME")
-                            }
-                        case .coordinates:
-                            let results = try decoder.decode(WeatherModel.self, from: safeData)
-                            DispatchQueue.main.async {
-                                completion(results)
-                                print(">>>> COORD", results.coord, searchRequest.longtitude )
                             }
                         case .dailyHourly:
                             let results = try decoder.decode(DailyHourlyWeatherModel.self, from: safeData)
@@ -38,7 +29,6 @@ struct FetchWeather {
                                 completion(results)
                             }
                         }
-                        
                     } catch {
                         print(error)
                     }
@@ -47,8 +37,6 @@ struct FetchWeather {
         }
         task.resume()
     }
-    
-    
 }
 
 struct SearchRequestModel {
@@ -60,11 +48,11 @@ struct SearchRequestModel {
     func weatherUrl() -> String {
         switch searchType {
         case .cityName:
-            return "https://api.openweathermap.org/data/2.5/weather?appid=5c6ad91dc081ba4b067f270326a0b202&units=metric&q="
+            return "https://api.openweathermap.org/data/2.5/weather?appid=5c6ad91dc081ba4b067f270326a0b202&units=metric&lang=ru&q="
         case .coordinates:
-            return "https://api.openweathermap.org/data/2.5/weather?appid=5c6ad91dc081ba4b067f270326a0b202&units=metric"
+            return "https://api.openweathermap.org/data/2.5/weather?appid=5c6ad91dc081ba4b067f270326a0b202&units=metric&lang=ru"
         case .dailyHourly:
-            return "https://api.openweathermap.org/data/2.5/onecall?appid=5c6ad91dc081ba4b067f270326a0b202&units=metric"
+            return "https://api.openweathermap.org/data/2.5/onecall?appid=5c6ad91dc081ba4b067f270326a0b202&units=metric&lang=ru"
         }
     }
     
