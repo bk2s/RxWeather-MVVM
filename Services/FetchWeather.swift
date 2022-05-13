@@ -11,6 +11,7 @@ struct FetchWeather {
     
     func fetchData(searchRequest: SearchRequestModel, completion: @escaping (_ weather: WeatherProtocol) -> ()) {
         guard let url = URL.urlForWeatherApi(searchBy: searchRequest) else { return }
+        print(">>>>", url)
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: url) { data, responce, error in
             if error == nil {

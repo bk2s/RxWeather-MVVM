@@ -96,11 +96,8 @@ class WeatherMapView: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     }
     
     private func goToPin() {
-        if let location = locationManager.location?.coordinate {
             let region = MKCoordinateRegion(center: self.myPin.coordinate, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
-            //self.latLon = Coordinates(lat: location.latitude, lon: location.longitude)
             weatherMap.setRegion(region, animated: true)
-        }
     }
     
     private func showUserLocation() {
