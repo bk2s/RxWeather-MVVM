@@ -47,6 +47,7 @@ class WeatherMapView: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         self.managers()
         self.prepareButtons()
+        self.goToPin()
     }
     
     private func managers() {
@@ -55,7 +56,7 @@ class WeatherMapView: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         self.locationManager.requestWhenInUseAuthorization()
         
         self.weatherMap.delegate = self
-        self.weatherMap.showsUserLocation = true
+        self.weatherMap.showsUserLocation = false
         self.weatherMap.showAnnotations(self.weatherMap.annotations, animated: true)
         self.weatherMap.cameraZoomRange = .init(minCenterCoordinateDistance: 100000)
         self.addNewAnnotationPin(lat: self.latLon?.lat ?? 0, lon: self.latLon?.lon ?? 0)
@@ -92,6 +93,14 @@ class WeatherMapView: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         self.myPin.lat = lat
         self.myPin.lon = lon
         self.weatherMap.addAnnotation(myPin)
+    }
+    
+    private func goToPin() {
+        if let location = locationManager.location?.coordinate {
+            let region = MKCoordinateRegion(center: self.myPin.coordinate, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+            //self.latLon = Coordinates(lat: location.latitude, lon: location.longitude)
+            weatherMap.setRegion(region, animated: true)
+        }
     }
     
     private func showUserLocation() {

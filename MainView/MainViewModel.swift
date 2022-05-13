@@ -111,13 +111,13 @@ class MainViewModel: ViewModel {
     
     func generateModelFrom(model: DailyWeatherModel) -> [WeatherDetailModel] {
         let temp = WeatherDetailModel(type: .temperature,
-                                      description: String(model.maxDayTemperature),
+                                      description: String(Int(model.maxDayTemperature)) + "°",
                                       windDirection: nil)
         let humidity = WeatherDetailModel(type: .humidity,
-                                          description: String(model.humidity),
+                                          description: String(model.humidity) + "%",
                                           windDirection: nil)
         let wind = WeatherDetailModel(type: .wind,
-                                      description: String(model.windSpeed), windDirection: model.windDegree )
+                                      description: String(model.windSpeed) + "м/сек", windDirection: model.windDegree )
         return [temp, humidity, wind]
         
     }
