@@ -20,6 +20,7 @@ struct DailyWeatherModel {
 class DailyWeatherCell: UITableViewCell {
     var model: DailyWeatherModel!
     
+    @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var dayNightMaxTemperatureLabel: UILabel!
     @IBOutlet weak var weatherIcon: UIImageView!
@@ -43,15 +44,27 @@ class DailyWeatherCell: UITableViewCell {
     func acceptColors(_ isSelected: Bool) {
         switch isSelected {
         case true:
-            self.dayNightMaxTemperatureLabel.textColor = UIColor(named: "IceBlueColor")
-            self.dayLabel.textColor = UIColor(named: "IceBlueColor")
-            self.weatherIcon.tintColor = UIColor(named: "IceBlueColor")
-            self.layer.shadowColor = CGColor(srgbRed: 255/90, green: 255/159, blue: 255/240, alpha: 1)
-            self.layer.shadowOffset = CGSize(width: 5, height: 5)
+                self.dayNightMaxTemperatureLabel.textColor = UIColor(named: "IceBlueColor")
+                self.dayLabel.textColor = UIColor(named: "IceBlueColor")
+                self.weatherIcon.tintColor = UIColor(named: "IceBlueColor")
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn) {
+                self.shadowView.layer.shadowOffset = CGSize(width: 0, height: 0)
+                self.shadowView.layer.shadowColor = UIColor(named: "IceBlueColor")?.cgColor
+                self.shadowView.layer.shadowOpacity = 0.3
+                self.shadowView.layer.shadowRadius = 6
+                self.shadowView.layer.shadowPath = UIBezierPath(roundedRect: self.shadowView.bounds,
+                                                                cornerRadius: 2).cgPath
+                self.shadowView.layer.shouldRasterize = true
+                self.shadowView.layer.rasterizationScale = UIScreen.main.scale
+            }
         case false:
+            UIView.animate(withDuration: 0.2) {
             self.dayNightMaxTemperatureLabel.textColor = .black
             self.dayLabel.textColor = .black
             self.weatherIcon.tintColor = .black
+            self.shadowView.layer.shadowOpacity = 0
+            }
+
         }
     }
 }

@@ -17,6 +17,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="317" height="98"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="93x-lQ-lba">
+                        <rect key="frame" x="0.0" y="10" width="317" height="78"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="e2c-Mi-0Mf">
                         <rect key="frame" x="16" y="0.0" width="285" height="98"/>
                         <subviews>
@@ -49,8 +53,12 @@
                     <constraint firstItem="e2c-Mi-0Mf" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Fb2-s7-e4I"/>
                     <constraint firstAttribute="trailing" secondItem="e2c-Mi-0Mf" secondAttribute="trailing" constant="16" id="Qen-hU-OW6"/>
                     <constraint firstItem="e2c-Mi-0Mf" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="XIK-NS-Ogc"/>
+                    <constraint firstItem="93x-lQ-lba" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="fsu-IN-Dty"/>
                     <constraint firstItem="e2c-Mi-0Mf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="iSr-Fk-9lk"/>
+                    <constraint firstAttribute="trailing" secondItem="93x-lQ-lba" secondAttribute="trailing" id="o3Y-kA-PP3"/>
                     <constraint firstAttribute="bottom" secondItem="e2c-Mi-0Mf" secondAttribute="bottom" id="svh-9V-Qap"/>
+                    <constraint firstAttribute="bottom" secondItem="93x-lQ-lba" secondAttribute="bottom" constant="10" id="t1i-dl-e4X"/>
+                    <constraint firstItem="93x-lQ-lba" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="vpV-T4-GOg"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -58,6 +66,7 @@
             <connections>
                 <outlet property="dayLabel" destination="n4o-p3-N8k" id="qXJ-QQ-fzC"/>
                 <outlet property="dayNightMaxTemperatureLabel" destination="cyB-Yz-TMa" id="XzX-MM-Vln"/>
+                <outlet property="shadowView" destination="93x-lQ-lba" id="YVY-Wy-6kA"/>
                 <outlet property="weatherIcon" destination="45M-rP-2yu" id="0Up-Di-j9T"/>
             </connections>
             <point key="canvasLocation" x="145.6521739130435" y="111.83035714285714"/>
