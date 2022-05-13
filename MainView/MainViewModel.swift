@@ -31,6 +31,7 @@ class MainViewModel: ViewModel {
         let weatherIcon = PublishSubject<String>()
         let cityName = PublishSubject<String>()
         let latLon = PublishSubject<Coordinates>()
+        let loading = PublishSubject<LoadingState>()
         
         func fetch(_ weather: WeatherProtocol) {
             let currentWeather = weather as! WeatherModel
@@ -41,7 +42,9 @@ class MainViewModel: ViewModel {
             latLon.onNext(Coordinates(lat: currentWeather.coord?.lat ?? 0, lon: currentWeather.coord?.lon ?? 0))
             
             let dailyHourlyRequest = SearchRequestModel(searchType: .dailyHourly, latitude: currentWeather.coord?.lat ?? 0, longtitude: currentWeather.coord?.lon ?? 0)
+            loading.onNext(.start)
             self.fetchWeather.fetchData(searchRequest: dailyHourlyRequest) { dh in
+                loading.onNext(.stop)
                 let dailyHourly = dh as! DailyHourlyWeatherModel
                 hourlyWeatherModel.onNext(self.generateHourly(from: dailyHourly))
                 dailyWeatherModel.onNext(self.generateDaily(from: dailyHourly))
@@ -56,14 +59,18 @@ class MainViewModel: ViewModel {
             let coordRequest = SearchRequestModel(searchType: .coordinates,
                                                   latitude: coord.lat,
                                                   longtitude: coord.lon)
+            loading.onNext(.start)
             self.fetchWeather.fetchData(searchRequest: coordRequest) { weather in
+                loading.onNext(.stop)
                 fetch(weather)
             }
         }.disposed(by: bag)
         
         input.cityName.bind(onNext: { city in
             let cityRequest = SearchRequestModel(searchType: .cityName, cityName: city)
+            loading.onNext(.start)
             self.fetchWeather.fetchData(searchRequest: cityRequest, completion: { weather in
+                loading.onNext(.stop)
                 fetch(weather)
             })
         }).disposed(by: bag)
@@ -72,7 +79,8 @@ class MainViewModel: ViewModel {
                       dailyWeatherModel: dailyWeatherModel,
                       weatherIcon: weatherIcon,
                       cityName: cityName,
-                      latLon: latLon
+                      latLon: latLon,
+                      loading: loading
         )
     }
     
@@ -146,5 +154,6 @@ class MainViewModel: ViewModel {
         let weatherIcon: PublishSubject<String>
         let cityName: PublishSubject<String>
         let latLon: PublishSubject<Coordinates>
+        let loading: PublishSubject<LoadingState>
     }
 }
