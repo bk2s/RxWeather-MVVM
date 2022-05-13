@@ -15,7 +15,7 @@ class CitySelectorView: UIViewController {
     var selectedCity: ((String) -> Void)?
     var viewModel = CitySelectorModel()
     var predict = PublishSubject<String>()
-
+    
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var searchField: UITextField!
@@ -30,7 +30,7 @@ class CitySelectorView: UIViewController {
         super.viewDidLoad()
         self.bind(with: viewModel)
     }
-
+    
     // MARK: - RxBinds
     
     func bind(with model: CitySelectorModel) {
@@ -38,7 +38,7 @@ class CitySelectorView: UIViewController {
         let output =  model.transform(input: input)
         
         // Observe SearchField RX
-        self.searchField.rx.value.delay(RxTimeInterval.milliseconds(30), scheduler: MainScheduler.instance)
+        self.searchField.rx.value
             .subscribe(onNext: { city in
                 if let city = city {
                     self.predict.onNext(city)
@@ -63,16 +63,16 @@ class CitySelectorView: UIViewController {
             let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
             cell.textLabel?.text = element
             return cell
-          }.disposed(by: bag)
+        }.disposed(by: bag)
         
         // TableView tapped RX
         citiesTableView.rx.itemSelected
-          .subscribe(onNext: { [weak self] indexPath in
-              let cell = self?.citiesTableView.cellForRow(at: indexPath) // as? NameOfCell
-              if let city = cell?.textLabel?.text {
-              self?.selectedCity?(city)
-                  self?.dismiss(animated: true)
-              }
-          }).disposed(by: bag)
+            .subscribe(onNext: { [weak self] indexPath in
+                let cell = self?.citiesTableView.cellForRow(at: indexPath) // as? NameOfCell
+                if let city = cell?.textLabel?.text {
+                    self?.selectedCity?(city)
+                    self?.dismiss(animated: true)
+                }
+            }).disposed(by: bag)
     }
 }

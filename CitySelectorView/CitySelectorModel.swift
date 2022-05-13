@@ -14,24 +14,22 @@ class CitySelectorModel: ViewModel {
     public let bag = DisposeBag()
     private let cn = FetchCityName()
     private var citiesArray: [String] = []
-
+    
     
     func transform(input: Input) -> Output {
         let cityNames = PublishSubject<[String]>()
-        
         input.predict.bind { predict in
             self.cn.fetchCity(predict: predict) { cities in
                 self.citiesArray = []
-               _ = cities.compactMap { city in
+                _ = cities.compactMap { city in
                     if let cityName = city.address?.name {
-                    //cityNames.onNext([cityName])
+                        //cityNames.onNext([cityName])
                         self.citiesArray.append(cityName)
                     }
                 }
                 cityNames.onNext(self.citiesArray.uniqued().sorted())
             }
         }.disposed(by: bag)
-        
         return Output(cityNames: cityNames)
     }
     

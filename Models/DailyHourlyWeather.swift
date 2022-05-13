@@ -188,8 +188,8 @@ public struct Daily: Codable {
         case pressure
         case humidity
         case dewPoint
-        case windSpeed
-        case windDeg
+        case windSpeed = "wind_speed"
+        case windDeg = "wind_deg"
         case windGust
         case weather
         case clouds

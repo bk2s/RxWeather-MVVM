@@ -153,6 +153,7 @@
                     <connections>
                         <outlet property="currentCityName" destination="A1P-aa-M0d" id="qCp-SM-d7K"/>
                         <outlet property="dailyWeatherTableView" destination="rt3-Mc-9ms" id="BoO-5h-he5"/>
+                        <outlet property="dateLabel" destination="alb-a9-ht8" id="eaJ-js-xUa"/>
                         <outlet property="geoButton" destination="SNh-uH-Tj5" id="Eh0-g1-zcz"/>
                         <outlet property="hourlyWeatherCollectionView" destination="VTH-1J-QdD" id="jSn-KU-Ee5"/>
                         <outlet property="largeWeatherIcon" destination="FWm-jY-Wni" id="s50-Pe-BM1"/>

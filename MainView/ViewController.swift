@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-struct LatLon {
+struct Coordinates {
     var lat: Double
     var lon: Double
 }
@@ -18,10 +18,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     var viewModel = MainViewModel()
     var bag = DisposeBag()
-    public var cityName = PublishSubject<String>()
-    public var coordinates = PublishSubject<LatLon>()
-    var latLon = LatLon(lat: 0, lon: 0)
-
+    public let cityName = PublishSubject<String>()
+    public let coordinates = PublishSubject<Coordinates>()
+    public let weatherDay = PublishSubject<[WeatherDetailModel]>()
+    var latLon = Coordinates(lat: 0, lon: 0)
+    
+    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var mapButton: UIButton!
     @IBOutlet weak var geoButton: UIButton!
     @IBOutlet weak var currentCityName: UILabel!
@@ -38,6 +40,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     
     // MARK: - Prepare
     private func prepareTableViews() {
+        self.dateLabel.text = DateService.shared.dayFromUnixTime(time: 0, dateCase: .full)
         // Detail Weather
         weatherDetailTableView.rx.setDelegate(self).disposed(by: viewModel.bag)
         weatherDetailTableView.register(UINib(nibName: "WeatherDetailsTableViewCell", bundle: nil),
@@ -51,11 +54,11 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         dailyWeatherTableView.register(UINib(nibName: "DailyWeatherCell", bundle: nil),
                                        forCellReuseIdentifier: "DailyWeatherCell")
     }
-
+    
     // MARK: - RxBinds
     private func bind(with viewModel: MainViewModel) {
-        
-        let input = MainViewModel.Input(geoTapped: self.geoButton.rx.tap.asDriver(), cityName: self.cityName, coordinates: self.coordinates)
+        // MARK: - Input
+        let input = MainViewModel.Input(geoTapped: self.geoButton.rx.tap.asDriver(), cityName: self.cityName, coordinates: self.coordinates, weatherDay: self.weatherDay)
         let output = viewModel.transform(input: input)
         
         self.cityName.subscribe(onNext: { city in
@@ -63,7 +66,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }).disposed(by: bag)
         self.cityName.onNext("Одесса")
         
-        // Buttons
+        // MARK: - Buttons
         self.geoButton.rx.tap.subscribe(onNext: {
             self.present(CitySelectorView(selectedCity: { city in
                 self.cityName.onNext(city)
@@ -73,12 +76,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         self.mapButton.rx.tap.subscribe(onNext: {
             self.present(WeatherMapView(latLon: self.latLon,
                                         selectedCoordinates: { lat, lon in
-                let latLonYo = LatLon(lat: lat, lon: lon)
-                print("HOLY SHIT", lat, lon, self.cityName)
+                let latLonYo = Coordinates(lat: lat, lon: lon)
                 self.coordinates.onNext(latLonYo)
             }) ,animated: true)
         }).disposed(by: bag)
         
+        // MARK: - Output
         // Detail Weather
         output.weatherModel.bind(to: weatherDetailTableView.rx.items(cellIdentifier: "weatherDetailCell", cellType: WeatherDetailsTableViewCell.self)) { row, item, cell in
             cell.bind(model: item)
@@ -91,11 +94,14 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         
         // Daily RX
         output.dailyWeatherModel.bind(to: dailyWeatherTableView.rx.items(cellIdentifier: "DailyWeatherCell", cellType: DailyWeatherCell.self)) { row, item, cell in
+            cell.selectionStyle = .none
             cell.bind(model: item)
         }.disposed(by: viewModel.bag)
         
         // Weather Icon RX
-        output.weatherIcon.subscribe(onNext: { icon in self.largeWeatherIcon.image = UIImage(systemName: icon); print(">>>>", icon) }).disposed(by: bag)
+        output.weatherIcon.subscribe(onNext: { icon in
+            self.largeWeatherIcon.image = UIImage(systemName: icon)
+        }).disposed(by: bag)
         
         output.latLon.subscribe(onNext: { latLon in
             self.latLon = latLon
@@ -104,9 +110,16 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         output.cityName.subscribe(onNext: { cityName in
             self.currentCityName.text = cityName
         }).disposed(by: bag)
-
-//        output.weatherModel.subscribe(onNext: { weather in
-//        }).disposed(by: bag)
+        
+        // TableView tapped RX
+        dailyWeatherTableView.rx.itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                let cell = self?.dailyWeatherTableView.cellForRow(at: indexPath)  as? DailyWeatherCell
+                if let model = cell?.model {
+                    self?.weatherDay.onNext(viewModel.generateModelFrom(model: model))
+                    self?.dateLabel.text = DateService.shared.dayFromUnixTime(time: model.day, dateCase: .full)
+                }
+            }).disposed(by: bag)
     }
 }
 
@@ -115,7 +128,7 @@ extension ViewController: UITableViewDelegate {
         if (tableView.dequeueReusableCell(withIdentifier: "weatherDetailCell") != nil) == true {
             return 40
         } else {
-        return 80
+            return 80
         }
     }
 }
