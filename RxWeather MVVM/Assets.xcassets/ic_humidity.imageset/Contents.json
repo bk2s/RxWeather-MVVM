@@ -6,10 +6,12 @@
       "scale" : "1x"
     },
     {
+      "filename" : "ic_humidity-1.pdf",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "ic_humidity-2.pdf",
       "idiom" : "universal",
       "scale" : "3x"
     }
