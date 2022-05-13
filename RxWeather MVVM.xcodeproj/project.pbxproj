@@ -487,6 +487,8 @@
 				DEVELOPMENT_TEAM = KHU94Q2JSS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RxWeather MVVM/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = RxWeather;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "User location needed";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -515,6 +517,8 @@
 				DEVELOPMENT_TEAM = KHU94Q2JSS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RxWeather MVVM/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = RxWeather;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "User location needed";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

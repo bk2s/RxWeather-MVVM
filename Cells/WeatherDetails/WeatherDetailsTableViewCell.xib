@@ -27,16 +27,16 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5м/сек" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iQG-iO-41A">
-                                <rect key="frame" x="40" y="0.0" width="255" height="20.5"/>
+                                <rect key="frame" x="40" y="0.0" width="261" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow.up.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="unQ-qj-1Of">
-                                <rect key="frame" x="305" y="2.5" width="30" height="15"/>
+                                <rect key="frame" x="311" y="2.5" width="24" height="15"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="1eE-3D-sFy"/>
+                                    <constraint firstAttribute="width" constant="24" id="1eE-3D-sFy"/>
                                 </constraints>
                             </imageView>
                         </subviews>
