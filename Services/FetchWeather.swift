@@ -9,7 +9,7 @@ import Foundation
 
 struct FetchWeather {
     
-    func fetchData(searchRequest: SearchRequestModel, completion: @escaping (_ weather: WeatherProtocol) -> ()) {
+    func fetchData(searchRequest: SearchRequestModel, completion: @escaping (_ weather: SearchModel) -> ()) {
         guard let url = URL.urlForWeatherApi(searchBy: searchRequest) else { return }
         print(">>>>", url)
         let session = URLSession(configuration: .default)
@@ -22,12 +22,12 @@ struct FetchWeather {
                         case .cityName, .coordinates:
                             let results = try decoder.decode(WeatherModel.self, from: safeData)
                             DispatchQueue.main.async {
-                                completion(results)
+                                completion(.citySearch(results))
                             }
                         case .dailyHourly:
                             let results = try decoder.decode(DailyHourlyWeatherModel.self, from: safeData)
                             DispatchQueue.main.async {
-                                completion(results)
+                                completion(.dailySearch(results))
                             }
                         }
                     } catch {
@@ -79,3 +79,7 @@ enum SearchType {
     case dailyHourly
 }
 
+enum SearchModel {
+    case citySearch(WeatherModel)
+    case dailySearch(DailyHourlyWeatherModel)
+}

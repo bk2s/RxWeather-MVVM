@@ -7,12 +7,8 @@
 
 import Foundation
 
-protocol WeatherProtocol {
-    
-}
-
 // MARK: - Welcome
-public struct WeatherModel: Codable, WeatherProtocol {
+public struct WeatherModel: Codable {
     public let coord: Coord?
     public let weather: [Weather]?
     public let base: String?

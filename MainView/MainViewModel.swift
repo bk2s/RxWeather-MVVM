@@ -33,22 +33,30 @@ class MainViewModel: ViewModel {
         let latLon = PublishSubject<Coordinates>()
         let loading = PublishSubject<LoadingState>()
         
-        func fetch(_ weather: WeatherProtocol) {
-            let currentWeather = weather as! WeatherModel
-            detailModels.onNext(self.generateModel(from: currentWeather))
-            
-            weatherIcon.onNext(ConditionName.shared.conditionName(conditionId: currentWeather.weather?[0].id ?? 0))
-            cityName.onNext(currentWeather.name ?? "Noname")
-            latLon.onNext(Coordinates(lat: currentWeather.coord?.lat ?? 0, lon: currentWeather.coord?.lon ?? 0))
-            
-            let dailyHourlyRequest = SearchRequestModel(searchType: .dailyHourly, latitude: currentWeather.coord?.lat ?? 0, longtitude: currentWeather.coord?.lon ?? 0)
-            loading.onNext(.start)
-            self.fetchWeather.fetchData(searchRequest: dailyHourlyRequest) { dh in
-                loading.onNext(.stop)
-                let dailyHourly = dh as! DailyHourlyWeatherModel
-                hourlyWeatherModel.onNext(self.generateHourly(from: dailyHourly))
-                dailyWeatherModel.onNext(self.generateDaily(from: dailyHourly))
+        func fetch(_ weather: SearchModel) {
+            switch weather {
+            case .citySearch(let currentWeather):
+                detailModels.onNext(self.generateModel(from: currentWeather))
+                weatherIcon.onNext(ConditionName.shared.conditionName(conditionId: currentWeather.weather?[0].id ?? 0))
+                cityName.onNext(currentWeather.name ?? "Noname")
+                latLon.onNext(Coordinates(lat: currentWeather.coord?.lat ?? 0, lon: currentWeather.coord?.lon ?? 0))
+                let dailyHourlyRequest = SearchRequestModel(searchType: .dailyHourly, latitude: currentWeather.coord?.lat ?? 0, longtitude: currentWeather.coord?.lon ?? 0)
+                loading.onNext(.start)
+                self.fetchWeather.fetchData(searchRequest: dailyHourlyRequest) { dh in
+                    loading.onNext(.stop)
+                    switch dh {
+                    case .citySearch( _):
+                        break
+                    case .dailySearch(let dailyHourlyWeatherModel):
+                        hourlyWeatherModel.onNext(self.generateHourly(from: dailyHourlyWeatherModel))
+                        dailyWeatherModel.onNext(self.generateDaily(from: dailyHourlyWeatherModel))
+                    }
+                }
+                
+            case .dailySearch(_):
+                break
             }
+            
         }
         
         input.weatherDay.bind { weather in

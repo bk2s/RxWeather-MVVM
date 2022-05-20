@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - DailyHourlyWeatherModel
-public struct DailyHourlyWeatherModel: Codable, WeatherProtocol {
+public struct DailyHourlyWeatherModel: Codable {
     public let lat: Double?
     public let lon: Double?
     public let timezone: String?
